@@ -48,7 +48,7 @@ public class FallingPlatform : Interactable
         rb.bodyType = RigidbodyType2D.Static;
         transform.position = resetPos;
         transform.rotation = resetRot;
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
         GetComponent<Renderer>().material.color = Color.green;
 
         times = 2f;
