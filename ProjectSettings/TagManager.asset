@@ -9,6 +9,8 @@ TagManager:
   - Coin
   - Key1
   - Key2
+  - Zombie
+  - Enemy
   layers:
   - Default
   - TransparentFX
