@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms;
 using TMPro;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class LevelSelectionScript : MonoBehaviour
 {
@@ -14,7 +15,7 @@ public class LevelSelectionScript : MonoBehaviour
     [SerializeField] Button NextLevel;
 
 
-    int scenes = SceneManager.sceneCount;
+    //int scenes = SceneManager.sceneCount;
 
     int levels;
 
@@ -22,12 +23,43 @@ public class LevelSelectionScript : MonoBehaviour
 
     private void Start()
     {
-        levels = Mathf.Clamp(levels, 1, scenes);
+        levels = SceneManager.sceneCount;
+        print(levels);
+        PreviousLevel.onClick.AddListener(PreviousLvClick);
+        NextLevel.onClick.AddListener(NextLvClick);
+        LevelName.text = "Level " + selectedLevel;
     }
 
-    public void ChangeLevel(int amount)
+    void PreviousLvClick()
+    {
+        print("prev click");
+        if (selectedLevel <= 1)
+        {
+            return;
+        }
+        else
+        {
+            LvChange(-1);
+        }
+    }
+
+    void NextLvClick()
+    {
+        print("next click");
+        if (selectedLevel >= levels)
+        {
+            return;
+        }
+        else
+        {
+            LvChange(1);
+        }
+    }
+
+    void LvChange(int amount)
     {
         selectedLevel += amount;
+        LevelName.text = "Level " + selectedLevel;
     }
 
     public void LoadLevel()
