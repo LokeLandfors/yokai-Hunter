@@ -8,7 +8,7 @@ public class playerSlide : MonoBehaviour
     public bool isSliding = false;
     public PlayerMovement PL;
     public Rigidbody2D rgb;
-    public BoxCollider2D regularCall;
+    public CapsuleCollider2D regularCall;
     public BoxCollider2D slideCall;
     public SpriteRenderer regularCallspr;
     public SpriteRenderer slideCallspr;
@@ -20,7 +20,7 @@ public class playerSlide : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.LeftControl))
             if (canSlide == true)
             {
                 PerfromSlide();

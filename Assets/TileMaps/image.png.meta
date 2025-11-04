@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c3c2d7dd892ee004a8d6ada2439be24e
+guid: e87cdcebb88ed03428d044a845b80548
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7993337172015236904
-    second: alexingtoarovsosvs_0
+      213: 1208040086343421634
+    second: image_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -48,10 +48,10 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 1
+  spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 1000
+  spritePixelsToUnits: 800
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: alexingtoarovsosvs_0
+      name: image_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1022
-        height: 1181
+        width: 826
+        height: 379
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 827c4e3bec90eee60800000000000000
-      internalID: 7993337172015236904
+      spriteID: 2ce8eecde02d3c010800000000000000
+      internalID: 1208040086343421634
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      alexingtoarovsosvs_0: 7993337172015236904
+      image_0: 1208040086343421634
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
