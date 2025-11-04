@@ -1,6 +1,10 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class Enemies : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
     [Header("Enemy Settings")]
     public float moveSpeed = 3f;
@@ -8,21 +12,23 @@ public class Enemies : MonoBehaviour
     public float jumpForce = 8f;
     public float groundCheckDistance = 0.2f;
     public float obstacleCheckDistance = 0.5f;
+    [SerializeField] float attackCooldown;
+    private bool canAttack = true;
 
     private Rigidbody2D rb;
     private Transform player;
     private bool isFacingRight = false;
     private bool isGrounded = false;
 
+    [Header("Platforming settings")]
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private Transform obstacleCheck;
 
     private Animator anim;
-    private float attackCooldown = 1.5f;
-    private bool canAttack = true;
 
-    void Start()
+
+    public virtual void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
@@ -31,10 +37,10 @@ public class Enemies : MonoBehaviour
         if (playerObj != null)
             player = playerObj.transform;
         else
-            Debug.LogWarning("No GameObject named 'Player' found in scene!");
+            print("No player found");
     }
 
-    void Update()
+    public virtual void Update()
     {
         if (player == null) return;
 
@@ -43,13 +49,13 @@ public class Enemies : MonoBehaviour
         CheckObstacle();
     }
 
-    void CheckGround()
+    public virtual void CheckGround()
     {
         // Check if grounded
         isGrounded = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, groundLayer);
     }
 
-    void CheckObstacle()
+    public virtual void CheckObstacle()
     {
         // detect bump or obstacle
         Vector2 direction = isFacingRight ? Vector2.right : Vector2.left;
@@ -62,7 +68,12 @@ public class Enemies : MonoBehaviour
         }
     }
 
-    void FollowPlayer()
+    public virtual void SearchPlayer()
+    {
+
+    }
+
+    public virtual void FollowPlayer()
     {
         float distance = Vector2.Distance(transform.position, player.position);
 
@@ -89,7 +100,7 @@ public class Enemies : MonoBehaviour
         }
     }
 
-    private System.Collections.IEnumerator Attack()
+    public virtual System.Collections.IEnumerator Attack()
     {
         canAttack = false;
         Debug.Log("Enemy Attacks!");
@@ -109,19 +120,5 @@ public class Enemies : MonoBehaviour
         Vector3 scale = transform.localScale;
         scale.x *= -1f;
         transform.localScale = scale;
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        // Debug rays for ground and obstacle checks
-        if (groundCheck != null)
-            Gizmos.DrawLine(groundCheck.position, groundCheck.position + Vector3.down * groundCheckDistance);
-
-        if (obstacleCheck != null)
-        {
-            Vector3 dir = isFacingRight ? Vector3.right : Vector3.left;
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(obstacleCheck.position, obstacleCheck.position + dir * obstacleCheckDistance);
-        }
-    }
+    }    
 }
