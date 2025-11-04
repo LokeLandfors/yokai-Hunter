@@ -153,13 +153,16 @@ public class PlayerMovement : MonoBehaviour
 
     void Jump()
     {
+        print("CanJump");
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
         {
             /* StartCoroutine(JumpCooldown());*/
+            print("Jump");
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
         if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0f)
         {
+            print("Jumping");
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
         }
     }
