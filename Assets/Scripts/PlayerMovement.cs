@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
@@ -6,20 +6,24 @@ using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveSpeed = 2f;
-    public float walkSpeed = 2f;
+    [Header("Movement Settings")]
+    public float moveSpeed = 5f;
+    public float walkSpeed = 5f;
     public float runSpeed = 5f;
     public float jumpForce = 10f;
 
     private bool isFacingRight = true;
-
-
-
     private Rigidbody2D rb;
-
     private bool isGrounded;
+    private bool canJump = true;
+    private bool isJumping = false;
+    private float horizontal;
 
     [SerializeField, Range(0, 10)] float groundCheckOffset;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private Transform wallCheck;
+    [SerializeField] private LayerMask wallLayer;
+    [SerializeField] private LayerMask groundLayer;
 
     public Slider usageWheel;
     private Animator animator;
@@ -28,28 +32,25 @@ public class PlayerMovement : MonoBehaviour
     playerSlide slide;
     public SpriteRenderer regularCallspr;
 
-    private bool canJump = true;
-    private bool isJumping = false;
-
     public Vector3 respawnPoint;
     public GameObject fallDetector;
-    [SerializeField] private Transform groundCheck;
 
+    [Header("Wall Jump Settings")]
     private bool isWallJumping;
     private float wallJumpingDirection;
     private float wallJumpingTime = 0.4f;
     private float wallJumpingCounter;
     private float wallJumpingDuration = 0.8f;
     private Vector2 wallJumpingPower = new Vector2(4f, 8f);
-
     private bool isWallSliding;
     private float wallSlidingSpeed = 0.8f;
-    private float horizontal;
 
-
-    [SerializeField] private Transform wallCheck;
-    [SerializeField] private LayerMask wallLayer;
-    [SerializeField] private LayerMask groundLayer;
+    [Header("Dash Settings")]
+    public float dashSpeed = 15f;
+    public float dashDuration = 0.2f;
+    public float dashCooldown = 1f;
+    private bool isDashing = false;
+    private bool canDash = true;
 
     void Start()
     {
@@ -57,8 +58,6 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         slide = GetComponent<playerSlide>();
         respawnPoint = transform.position;
-
-
     }
 
     public void Reset()
@@ -75,10 +74,8 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
-
         print("trigger" + collision.gameObject.name);
         if (collision.gameObject.GetComponent<Interactable>() == true)
         {
@@ -91,39 +88,61 @@ public class PlayerMovement : MonoBehaviour
         return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
     }
 
-    void Update()
-    {
-        horizontal = Input.GetAxisRaw("Horizontal");
-        float moveDirection = Input.GetAxis("Horizontal");
-
-
-        Move(moveDirection);
-
-        Jump();
-
-
-        if (Input.GetKey(KeyCode.LeftShift) == true)
-        {
-            moveSpeed = runSpeed;
-        }
-        else
-        {
-            moveSpeed = walkSpeed;
-            {
-                moveSpeed = walkSpeed;
-            }
-        }
-        WallSlide();
-        WallJump();
-        if (!isWallJumping)
-        {
-            Flip();
-        }
-    }
-
     private bool IsWalled()
     {
         return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayer);
+    }
+
+    void Update()
+    {
+        // Disable controls during dash
+        if (isDashing) return;
+
+        horizontal = Input.GetAxisRaw("Horizontal");
+        float moveDirection = Input.GetAxis("Horizontal");
+
+        Move(moveDirection);
+        Jump();
+        WallSlide();
+        WallJump();
+
+        if (!isWallJumping)
+            Flip();
+
+        // --- DASH INPUT ---
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash && !isDashing)
+        {
+            StartCoroutine(PerformDash());
+        }
+
+        // --- SLIDE INPUT CHANGE (C → Left Ctrl) ---
+        if (slide != null && Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            slide.isSliding = true;
+        }
+    }
+
+    void Move(float direction)
+    {
+        float moveInput = Input.GetAxis("Horizontal");
+        if (slide == null || slide.isSliding == false)
+        {
+            rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+        }
+    }
+
+    void Jump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
+        {
+            print("Jump");
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        }
+        if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0f)
+        {
+            print("Jumping");
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
+        }
     }
 
     private void WallSlide()
@@ -139,34 +158,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void Move(float direction)
-    {
-        float moveInput = Input.GetAxis("Horizontal");
-        if (slide.isSliding == false && Mathf.Abs(moveInput) > 0)
-        {
-            rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
-        }
-
-
-        float running = Mathf.Abs(direction * moveSpeed);
-    }
-
-    void Jump()
-    {
-        print("CanJump");
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
-        {
-            /* StartCoroutine(JumpCooldown());*/
-            print("Jump");
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-        }
-        if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0f)
-        {
-            print("Jumping");
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
-        }
-    }
-
     private void WallJump()
     {
         if (isWallSliding)
@@ -174,7 +165,6 @@ public class PlayerMovement : MonoBehaviour
             isWallJumping = false;
             wallJumpingDirection = -transform.localScale.x;
             wallJumpingCounter = wallJumpingTime;
-
             CancelInvoke(nameof(StopWallJumping));
         }
         else
@@ -214,5 +204,26 @@ public class PlayerMovement : MonoBehaviour
             localScale.x *= -1f;
             transform.localScale = localScale;
         }
+    }
+
+    // --- DASH LOGIC ---
+    private IEnumerator PerformDash()
+    {
+        canDash = false;
+        isDashing = true;
+
+        float originalGravity = rb.gravityScale;
+        rb.gravityScale = 0f;
+
+        float dashDirection = transform.localScale.x > 0 ? 1f : -1f;
+        rb.linearVelocity = new Vector2(dashDirection * dashSpeed, 0f);
+
+        yield return new WaitForSeconds(dashDuration);
+
+        rb.gravityScale = originalGravity;
+        isDashing = false;
+
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
     }
 }
