@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement Settings")]
     public float moveSpeed = 5f;
     public float walkSpeed = 5f;
-    public float runSpeed = 5f;
+    public float runSpeed =  10f;
     public float jumpForce = 10f;
 
     private bool isFacingRight = true;
@@ -95,7 +95,6 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // Disable controls during dash
         if (isDashing) return;
 
         horizontal = Input.GetAxisRaw("Horizontal");
@@ -109,13 +108,11 @@ public class PlayerMovement : MonoBehaviour
         if (!isWallJumping)
             Flip();
 
-        // --- DASH INPUT ---
         if (Input.GetKeyDown(KeyCode.LeftShift) && canDash && !isDashing)
         {
             StartCoroutine(PerformDash());
         }
 
-        // --- SLIDE INPUT CHANGE (C → Left Ctrl) ---
         if (slide != null && Input.GetKeyDown(KeyCode.LeftControl))
         {
             slide.isSliding = true;
@@ -135,12 +132,11 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
         {
-            print("Jump");
+            /* StartCoroutine(JumpCooldown());*/
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
         if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0f)
         {
-            print("Jumping");
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
         }
     }
@@ -206,7 +202,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // --- DASH LOGIC ---
     private IEnumerator PerformDash()
     {
         canDash = false;
