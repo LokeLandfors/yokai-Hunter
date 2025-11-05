@@ -67,7 +67,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        print("collision" + collision.gameObject.name);
+        //print("collision" + collision.gameObject.name);
         if (collision.gameObject.GetComponent<Interactable>() == true)
         {
             collision.gameObject.GetComponent<Interactable>().Interact(this);
