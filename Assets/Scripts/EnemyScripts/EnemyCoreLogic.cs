@@ -1,13 +1,15 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
+using System.Drawing;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEditor.ShaderGraph.Internal;
-using System.Runtime.InteropServices.WindowsRuntime;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
-public class EnemyCoreLogic : MonoBehaviour
+public class EnemyCoreLogic : MonoBehaviour //allt det här av Edwin tror jag
 {
     public int maxhealth;
     int health;
@@ -19,16 +21,22 @@ public class EnemyCoreLogic : MonoBehaviour
     public bool jumps; //kan hoppa
     public float jumpForce;
     public bool wallclimbs; //kan klättra väggar
-    public float cloaks; //kan bli osynlig
     float currentspeed;
+    float jumpCooldown = 0.5f;
+    float activeJumpCool = 0;
 
     [SerializeField] Rigidbody2D rb;
     [SerializeField] GameObject groundCheck;
     [SerializeField] LayerMask groundLayer;
 
     public int walkDir => faceright ? 1 : -1;
+    //^^^ automatiskt ändra värde i förhållande till faceright
     public virtual bool TouchingWall => Physics2D.OverlapCircle((Vector2)transform.position + new Vector2(walkDir,0), 0.2f, groundLayer) ? true : false;
+    //^^^ Kolla om man rör en vägg åt det håll fienden går
     public virtual bool TouchingGround => Physics2D.OverlapCircle(groundCheck.transform.position, 0.2f, groundLayer) ? true : false;
+    //^^^ Kolla om man är på marken med en overlap circle
+    public virtual bool atLedge => Physics2D.Raycast((Vector2)transform.position + new Vector2(walkDir, 0), Vector2.down, 1.3f) ? false : true;
+    //^^^ kolla om fienden är vid en kant
 
     //combat
     public bool melee; //kan göra melee attacker
@@ -39,9 +47,11 @@ public class EnemyCoreLogic : MonoBehaviour
     //detection
     public float visDist; //hur långt spelaren syns
     bool seePlr => SearchTarget() ? true: false;
-    bool following = false;
-    bool searching = false;
-    Vector2 lastseen;
+    bool following = false; //ifall den ser och följer efter spelaren
+    bool searching = false; //^^^ fast den inte ser spelaren
+    [SerializeField] float maxSearchTime; //hur länge den får försöka nå sista sedda position
+    float activeSearchTime;
+    Vector2 lastseen; //spelarens sista sedda position
     Transform player;
     public LayerMask playerLayer; //holing shits det rimmar!!!!
 
@@ -57,54 +67,116 @@ public class EnemyCoreLogic : MonoBehaviour
 
     void Start()
     {
+        health = maxhealth;
         player = GameObject.Find("Player").transform;
-
+        currentspeed = roamspeed;
         //gör slumpmässigt vilket håll fienden spawnar åt
         int rand = Random.Range(0, 1);
         if (rand == 1) faceright = true; else faceright = false;
     }
 
-    private void Update()
+    public virtual void Update()
     {
-        SearchTarget();
-        if (!seePlr)
+        if (seePlr) //ser spelaren och börjar sitt förföljande
         {
-            Roam();
-        }
-        else
-        {
+            following = true;
+            currentspeed = agrospeed;
             FollowTarget();
         }
-    }
-
-    public virtual void Walk()
-    {
-        rb.linearVelocityX = roamspeed * walkDir;
-    }
-
-    public virtual void Jump()
-    {
-        if (TouchingGround)
+        else if (following && !seePlr) //om den har tappat syn av fienden så börja sök funktionen
         {
-        rb.linearVelocityY = jumpForce; 
+            searching = true;
+            following = false;
+            currentspeed = agrospeed;
+            activeSearchTime = maxSearchTime;
         }
-    }
-
-    public virtual void Roam() //Gå runt utan mening i livet
-    {
-        if (seePlr)
-        {
-            FollowTarget();
-        }
-        else if (searching)
+        else if(searching && activeSearchTime > 0) //sök tills search time är 0
         {
             GoToPoint(lastseen);
         }
         else
         {
-            Walk();
-            faceright = TouchingWall ? !faceright : faceright;
+            following = false;
+            searching = false;
+            Roam();
         }
+
+        /*if (seePlr) //ser spelaren och börjar sitt förföljande
+        {
+            following = true;
+            currentspeed = agrospeed;
+            FollowTarget();
+        }
+        else if (following) //om den har tappat syn av fienden
+        {
+            searching = true;
+            following = false;
+            currentspeed = agrospeed;
+            activeSearchTime = maxSearchTime;
+            GoToPoint(lastseen);
+        }
+        else
+        {
+            following = false;
+        }
+        if (!seePlr && !searching) //Roam
+        {
+            currentspeed = roamspeed;
+            Roam();
+        }
+        else if (!seePlr && following) //Search
+        {
+            currentspeed = agrospeed;
+            following = false;
+            searching = true;
+        }
+        else //follow
+        {
+            FollowTarget();
+        }*/
+        currentspeed = TouchingGround ? currentspeed : 0; //kan inte ändra hastighet i luften
+        activeJumpCool = Mathf.Clamp(activeJumpCool - Time.deltaTime,0,jumpCooldown);
+        activeSearchTime = Mathf.Clamp(activeSearchTime - Time.deltaTime, 0, maxSearchTime);
+    }
+
+    public virtual void Walk()
+    {
+        rb.linearVelocityX = currentspeed * walkDir;
+    }
+
+    public virtual void Jump()
+    {
+        if (TouchingGround && activeJumpCool >= 0)
+        {
+            rb.linearVelocity = Vector2.one * jumpForce;
+            activeJumpCool = jumpCooldown;
+        }
+    }
+
+    public virtual void Roam() //Patrullering typ, gå fram och tillbaks
+    {
+
+        currentspeed = roamspeed;
+        Walk();
+        faceright = TouchingWall || atLedge && TouchingGround ? !faceright : faceright;
+        /*if (seePlr) //ser spelaren och börjar sitt förföljande
+        {
+            following = true;
+            currentspeed = agrospeed;
+            FollowTarget();
+        }
+        else if (following) //om den har tappat syn av fienden
+        {
+            searching = true;
+            following = false;
+            currentspeed = agrospeed;
+            activeSearchTime = maxSearchTime;
+            GoToPoint(lastseen);
+        }
+        else
+        {
+            following = false;
+        }*/
     }
 
     public virtual bool SearchTarget() //kolla om target är synlig
@@ -113,19 +185,11 @@ public class EnemyCoreLogic : MonoBehaviour
         Debug.DrawRay(transform.position, player.position - transform.position);
         if (searchRay.collider) //player seen
         {
-            print(searchRay.collider.gameObject.name);
             if (searchRay.collider.gameObject.name == "Player")
             {
                 return true;
-                following = true;
             }
         }
-        else if (following)
-        {
-            following = false;
-            searching = true;
-        }
-        print("Lost player");
         return false;
 
     }
@@ -133,18 +197,19 @@ public class EnemyCoreLogic : MonoBehaviour
     void GoToPoint(Vector2 point)
     {
         faceright = point.x - transform.position.x > 0 ? true : false;
-        while (true)
+        if (searching)
         {
-            currentspeed = agrospeed;
             Walk();
-            if (TouchingWall) Jump();
-            new WaitForSeconds(Time.fixedDeltaTime);
+            if ((TouchingWall || atLedge) && jumps) Jump();
         }
     }
 
-    public virtual void FollowTarget() //ja du VAD kan den här göra????
+    public virtual void FollowTarget() //följ spelaren
     {
         following = true;
         lastseen = player.position;
+        faceright = lastseen.x - transform.position.x > 0 ? true : false;
+        Walk();
+        if ((TouchingWall || atLedge) && jumps && player.transform.position.y >= transform.position.y -.1f) Jump();
     }
 }
