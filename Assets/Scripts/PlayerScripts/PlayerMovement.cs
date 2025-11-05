@@ -31,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
     public SpriteRenderer sprite;
     public Animator anim;
     playerSlide slide;
+    [SerializeField] PlayerAttack atkCode;
     public SpriteRenderer regularCallspr;
 
     public Vector3 respawnPoint;
@@ -46,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isWallSliding;
     private float wallSlidingSpeed = 2.5f; // smoother slide
 
-    // 🆕 wall jump cooldown
+    // wall jump cooldown
     [SerializeField] float wallJumpCooldown = 0.6f;
     private bool canWallJump = true;
 
@@ -113,7 +114,7 @@ public class PlayerMovement : MonoBehaviour
             Flip();
 
         // --- DASH INPUT ---
-        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash && !isDashing && slide.isSliding == false)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash && !isDashing && slide.isSliding == false && atkCode.isAttacking == false)
         {
             StartCoroutine(PerformDash());
         }
@@ -161,7 +162,8 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // --- WALL JUMP with cooldown ---
+
+    Vector2 lastWallJPos;
     private void WallJump()
     {
         if (isWallSliding)
@@ -176,14 +178,16 @@ public class PlayerMovement : MonoBehaviour
             wallJumpingCounter -= Time.deltaTime;
         }
 
-        if (Input.GetButtonDown("Jump") && wallJumpingCounter > 0f && canWallJump)
+        if (Input.GetButtonDown("Jump") && wallJumpingCounter > 0f && canWallJump && (transform.position.x <= lastWallJPos.x - 1 || transform.position.x >= lastWallJPos.x + 1))
         {
             StartCoroutine(WallJumpCooldownRoutine()); // start cooldown
+
 
             isWallJumping = true;
             rb.linearVelocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
             wallJumpingCounter = 0f;
 
+            lastWallJPos = transform.position;
             // flip
             if ((isFacingRight && wallJumpingDirection < 0) || (!isFacingRight && wallJumpingDirection > 0))
             {
@@ -236,5 +240,10 @@ public class PlayerMovement : MonoBehaviour
 
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(wallCheck.position, 0.2f); //Rita wallcheck cirkel
     }
 }

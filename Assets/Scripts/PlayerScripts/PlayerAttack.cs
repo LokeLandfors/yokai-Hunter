@@ -58,6 +58,8 @@ public class PlayerAttack : MonoBehaviour
     private IEnumerator PerformAttack()
     {
         canAttack = false;
+        slideCode.isSliding = false;
+        moveCode.isDashing = false;
         isAttacking = true;
         moveCode.canMove = false;
         attackTimeCounter = 0f;
@@ -66,6 +68,8 @@ public class PlayerAttack : MonoBehaviour
         yield return new WaitForSeconds(attackDuration);
         moveCode.canMove = true;
         isAttacking = false;
+        slideCode.isSliding = false;
+        moveCode.isDashing = false;
         yield return new WaitForSeconds(CooldownBtwAttacks);
         canAttack = true;
     }
