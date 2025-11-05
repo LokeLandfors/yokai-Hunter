@@ -23,7 +23,7 @@ public class LevelSelectionScript : MonoBehaviour
 
     private void Start()
     {
-        levels = SceneManager.sceneCount;
+        levels = SceneManager.sceneCountInBuildSettings;
         print(levels);
         PreviousLevel.onClick.AddListener(PreviousLvClick);
         NextLevel.onClick.AddListener(NextLvClick);
@@ -64,6 +64,7 @@ public class LevelSelectionScript : MonoBehaviour
 
     public void LoadLevel()
     {
+        //print(SceneManager.GetSceneAt(selectedLevel));
         SceneManager.LoadScene(selectedLevel);
     }
 }
