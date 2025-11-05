@@ -15,13 +15,14 @@ public class playerSlide : MonoBehaviour
     private bool canSlide = true;
     public float slidespeed = 1800f;
     [SerializeField] GameObject slideCol;
+    [SerializeField] private PlayerMovement moveCode;
     private bool IsFacingRight = true; // För Slide
 
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.LeftControl))
-            if (canSlide == true)
+            if (canSlide == true && moveCode.isDashing == false)
             {
                 PerfromSlide();
             }

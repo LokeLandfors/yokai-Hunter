@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: Bablbin_0
   m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.Tilemaps.Tile
-  m_Sprite: {fileID: 1195955949974888897, guid: fc0165b48d68f9141bb281b0ad4a2766, type: 3}
+  m_Sprite: {fileID: 1438294513, guid: 42aed330f4493964aade6462bea78ea3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

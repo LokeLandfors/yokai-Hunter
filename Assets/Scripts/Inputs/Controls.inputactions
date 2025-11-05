@@ -1,0 +1,41 @@
+{
+    "version": 1,
+    "name": "Controls",
+    "maps": [
+        {
+            "name": "Attack",
+            "id": "05ef7384-c6b5-4e70-864b-dc3967ee27a0",
+            "actions": [
+                {
+                    "name": "Attack",
+                    "type": "PassThrough",
+                    "id": "ce74ab3b-c09a-46f6-bde7-8048ec59bb60",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c1d27ac0-f5b8-4047-bdda-673148493864",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Keyboard",
+            "bindingGroup": "Keyboard",
+            "devices": []
+        }
+    ]
+}
