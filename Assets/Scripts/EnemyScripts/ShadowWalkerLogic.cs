@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class ShadowWalkerLogic : EnemyCoreLogic
 {
-    public int damage = 2; //Skada som spelaren ska ta när Enemy rör honom
+    /*public int damage = 2; //Skada som spelaren ska ta när Enemy rör honom
     public float attackTime = 2f;
     protected virtual bool MeleeAttack(bool returnFoundHit)
     {
@@ -33,5 +33,5 @@ public class ShadowWalkerLogic : EnemyCoreLogic
         activeMeleeCool -= Time.deltaTime;
         yield return new WaitForSeconds(Time.deltaTime);
         }
-    }
+    }*/
 }

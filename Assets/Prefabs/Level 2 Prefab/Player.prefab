@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1607752366643451490}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 112648136621834397}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.333, y: 0, z: 0}
+  m_LocalPosition: {x: 0.215, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 4.16, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -40,7 +40,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1091373335664319332}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 7134052066496055409}
   - component: {fileID: 5865353205251440363}
   - component: {fileID: 7181627382713198601}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: slide.Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -208,7 +208,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6009606277188070466}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: AttackTransform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -248,8 +248,8 @@ GameObject:
   - component: {fileID: 4191527676169490985}
   - component: {fileID: 778621858423328225}
   - component: {fileID: 1551478658853466461}
-  m_Layer: 0
-  m_Name: 'Player '
+  m_Layer: 8
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -540,6 +540,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRespawn
   respawnPoint: {fileID: 0}
   playerHealth: 10
+  deathScreenUI: {fileID: 0}
+  deathParticles:
+  - {fileID: 5096148057906189823, guid: 4a122dcc68153794295f6953dd91521e, type: 3}
+  - {fileID: 1962614393226834858, guid: 3d13ef1f52d189642930444f906fc622, type: 3}
+  deathDelay: 1
+  blood2: {fileID: 0}
+  bloodAnimDuration: 3
 --- !u!114 &1551478658853466461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -562,6 +569,7 @@ MonoBehaviour:
   slideCode: {fileID: 1514159276681044451}
   moveCode: {fileID: 4856406807187666683}
   attackDuration: 1
+  attackDelay: 0.8
   isAttacking: 0
   canAttack: 1
 --- !u!1 &6675616913903705495
@@ -574,7 +582,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3523337858641680869}
   - component: {fileID: 623815538602304778}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BodyTexture
   m_TagString: Untagged
   m_Icon: {fileID: 0}
