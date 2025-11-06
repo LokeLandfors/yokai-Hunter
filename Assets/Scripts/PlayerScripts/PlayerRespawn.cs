@@ -7,7 +7,7 @@ public class PlayerRespawn : MonoBehaviour
 {
     [Header("Respawn Settings")]
     public Transform respawnPoint;
-    public int playerHealth = 10;
+    public float playerHealth = 10;
 
     [Header("Death Settings")]
     public GameObject deathScreenUI;
