@@ -9,12 +9,10 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
-public class EnemyCoreLogic : MonoBehaviour //allt det här av Edwin tror jag
-{
-    public int maxhealth;
-    int health;
+public class EnemyCoreLogic : MonoBehaviour //Av edwin
+{   //det här scriptet är äckligt variabel och skräp fyllt jag är så ledsen för den som läser detta
 
-    //movement
+    // Movement
     public bool faceright;
     public float roamspeed; //vanlig gå hastighet
     public float agrospeed; //gå hastighet när ser spelare
@@ -24,27 +22,39 @@ public class EnemyCoreLogic : MonoBehaviour //allt det här av Edwin tror jag
     float currentspeed;
     float jumpCooldown = 0.5f;
     float activeJumpCool = 0;
+    bool activeLongJump = false;
 
+    // Physics och collisions
     [SerializeField] Rigidbody2D rb;
     [SerializeField] GameObject groundCheck;
     [SerializeField] LayerMask groundLayer;
 
+    //funktions-variabler (jag har ingen aning om vad de kallas)
     public int walkDir => faceright ? 1 : -1;
     //^^^ automatiskt ändra värde i förhållande till faceright
-    public virtual bool TouchingWall => Physics2D.OverlapCircle((Vector2)transform.position + new Vector2(walkDir,0), 0.2f, groundLayer) ? true : false;
+    public virtual bool TouchingWall => Physics2D.OverlapCircle((Vector2)transform.position + new Vector2(walkDir,0), 0.3f, groundLayer) ? true : false;
     //^^^ Kolla om man rör en vägg åt det håll fienden går
-    public virtual bool TouchingGround => Physics2D.OverlapCircle(groundCheck.transform.position, 0.2f, groundLayer) ? true : false;
+    public virtual bool TouchingGround => Physics2D.OverlapCircle(groundCheck.transform.position, 0.05f, groundLayer) ? true : false;
     //^^^ Kolla om man är på marken med en overlap circle
-    public virtual bool atLedge => Physics2D.Raycast((Vector2)transform.position + new Vector2(walkDir, 0), Vector2.down, 1.3f) ? false : true;
+    public virtual bool atLedge => Physics2D.Raycast((Vector2)transform.position + new Vector2(walkDir, 0), Vector2.down, 1.5f) ? true : false;
     //^^^ kolla om fienden är vid en kant
 
-    //combat
+    public virtual bool atDropDown => Physics2D.Raycast((Vector2)transform.position + new Vector2(walkDir, 0), Vector2.down, 3.5f) ? true : false;
+    //^^^ kolla om fienden är vid en kant som kan hoppas av från
+
+    // Combat
     public bool melee; //kan göra melee attacker
-    public float meleeRange; //hur långt meleeattack når
+    public float MeleeDist; //hur nära för att göra melee attack
+    public float meleeAttackDist; //hur långt meleeattack når
+    public float meleeCool; //Melee cooldown
+    float activeMeleeCool;
+    bool activeMelee; //aktiverat melee
+
     public bool ranged; //kan använda distansvapen
     public float fireRange; //hur långt bort den får skjuta mot spelaren
+    public bool walkableranged; //kan gå medans skjuter
 
-    //detection
+    // Playerdetection
     public float visDist; //hur långt spelaren syns
     bool seePlr => SearchTarget() ? true: false;
     bool following = false; //ifall den ser och följer efter spelaren
@@ -53,7 +63,9 @@ public class EnemyCoreLogic : MonoBehaviour //allt det här av Edwin tror jag
     float activeSearchTime;
     Vector2 lastseen; //spelarens sista sedda position
     Transform player;
-    public LayerMask playerLayer; //holing shits det rimmar!!!!
+    public LayerMask playerLayer; //coolt rim grej
+
+
 
     public virtual void MeleeAttack()
     {
@@ -67,7 +79,6 @@ public class EnemyCoreLogic : MonoBehaviour //allt det här av Edwin tror jag
 
     void Start()
     {
-        health = maxhealth;
         player = GameObject.Find("Player").transform;
         currentspeed = roamspeed;
         //gör slumpmässigt vilket håll fienden spawnar åt
@@ -79,9 +90,24 @@ public class EnemyCoreLogic : MonoBehaviour //allt det här av Edwin tror jag
     {
         if (seePlr) //ser spelaren och börjar sitt förföljande
         {
+            if (melee && (player.transform.position - transform.position).magnitude < meleeAttackDist && TouchingGround)
+            {
+                currentspeed = 0;
+                MeleeAttack();
+                return;
+            }
+            else if (ranged && (player.transform.position - transform.position).magnitude < fireRange && TouchingGround)
+            {
+                currentspeed = 0;
+                RangedAttack();
+                return;
+            }
+            else
+            {
             following = true;
             currentspeed = agrospeed;
             FollowTarget();
+            }
         }
         else if (following && !seePlr) //om den har tappat syn av fienden så börja sök funktionen
         {
@@ -96,87 +122,62 @@ public class EnemyCoreLogic : MonoBehaviour //allt det här av Edwin tror jag
         }
         else
         {
+            currentspeed = roamspeed;
             following = false;
             searching = false;
             Roam();
         }
-
-        /*if (seePlr) //ser spelaren och börjar sitt förföljande
-        {
-            following = true;
-            currentspeed = agrospeed;
-            FollowTarget();
-        }
-        else if (following) //om den har tappat syn av fienden
-        {
-            searching = true;
-            following = false;
-            currentspeed = agrospeed;
-            activeSearchTime = maxSearchTime;
-            GoToPoint(lastseen);
-        }
-        else
-        {
-            following = false;
-        }
-        if (!seePlr && !searching) //Roam
-        {
-            currentspeed = roamspeed;
-            Roam();
-        }
-        else if (!seePlr && following) //Search
-        {
-            currentspeed = agrospeed;
-            following = false;
-            searching = true;
-        }
-        else //follow
-        {
-            FollowTarget();
-        }*/
-        currentspeed = TouchingGround ? currentspeed : 0; //kan inte ändra hastighet i luften
+        activeLongJump = !TouchingGround;
         activeJumpCool = Mathf.Clamp(activeJumpCool - Time.deltaTime,0,jumpCooldown);
         activeSearchTime = Mathf.Clamp(activeSearchTime - Time.deltaTime, 0, maxSearchTime);
     }
 
     public virtual void Walk()
     {
-        rb.linearVelocityX = currentspeed * walkDir;
+        if (TouchingWall && !TouchingGround) //vid vägg men i luften, kan vara fast
+    {
+        if (jumps && activeJumpCool <= 0) //försök hoppa över om det går
+        {
+            Jump();
+        }
+        else //byt riktning och gå bort
+        {
+            faceright = !faceright;
+            Walk();
+        }
+    }
+    else
+    {
+            rb.linearVelocityX = !activeLongJump ? currentspeed / 5 * walkDir : rb.linearVelocityX;
+        }
+
     }
 
     public virtual void Jump()
     {
         if (TouchingGround && activeJumpCool >= 0)
         {
-            rb.linearVelocity = Vector2.one * jumpForce;
+            rb.linearVelocityY = jumpForce;
             activeJumpCool = jumpCooldown;
+        }
+    }
+
+    public virtual void LongJump() //ifall spelaren är på en plattform
+    {
+        if (TouchingGround && activeJumpCool >= 0)
+        {
+            rb.linearVelocity = new Vector2(agrospeed*jumpForce , jumpForce);
+            activeJumpCool = jumpCooldown;
+            //activeLongJump = true;
+            print("Big ass jump");
         }
     }
 
     public virtual void Roam() //Patrullering typ, gå fram och tillbaks
     {
-
         currentspeed = roamspeed;
         Walk();
-        faceright = TouchingWall || atLedge && TouchingGround ? !faceright : faceright;
-        /*if (seePlr) //ser spelaren och börjar sitt förföljande
-        {
-            following = true;
-            currentspeed = agrospeed;
-            FollowTarget();
-        }
-        else if (following) //om den har tappat syn av fienden
-        {
-            searching = true;
-            following = false;
-            currentspeed = agrospeed;
-            activeSearchTime = maxSearchTime;
-            GoToPoint(lastseen);
-        }
-        else
-        {
-            following = false;
-        }*/
+        faceright = TouchingWall || !atDropDown && TouchingGround ? !faceright : faceright;
     }
 
     public virtual bool SearchTarget() //kolla om target är synlig
@@ -194,13 +195,31 @@ public class EnemyCoreLogic : MonoBehaviour //allt det här av Edwin tror jag
 
     }
 
-    void GoToPoint(Vector2 point)
+    void GoToPoint(Vector2 point) //egentliggen själva leta funktionen men orka byta namn nu
     {
+        Vector2 plrOffset = new Vector2(transform.position.y - player.position.y, transform.position.x - player.position.x);
+        float glen = (player.position - transform.position).magnitude;
+        print(plrOffset);
+        print(glen);
+        //fett lång if men basically kollar ifall spelaren är för långt uppe eller nere över enemy
+        /*if ((plrOffset.y < transform.position.y + 2 || plrOffset.y > transform.position.y -2))
+        {
+            if (plrOffset.x < transform.position.x + 2 || plrOffset.x > transform.position.x - 2) return;
+            //^^^ avsluta om spelaren är för nära på x-axeln, då den antagliggen är i princip över enemy då den kommer börja "spasma"
+        }*/
         faceright = point.x - transform.position.x > 0 ? true : false;
         if (searching)
         {
             Walk();
-            if ((TouchingWall || atLedge) && jumps) Jump();
+            if (TouchingWall && jumps && player.position.y >= transform.position.y - 0.1f && activeJumpCool <= 0)
+            {
+                Jump();
+            }
+            else if (atLedge && jumps && player.position.y >= transform.position.y - 0.1f && activeJumpCool <= 0)
+            {
+                LongJump();
+            }
+
         }
     }
 
@@ -209,7 +228,15 @@ public class EnemyCoreLogic : MonoBehaviour //allt det här av Edwin tror jag
         following = true;
         lastseen = player.position;
         faceright = lastseen.x - transform.position.x > 0 ? true : false;
+        if (TouchingWall && jumps && player.position.y >= transform.position.y - 0.1f && activeJumpCool <= 0)
+        {
+            Jump();
+        }
+        else if (atLedge && jumps && player.position.y >= transform.position.y - 0.1f && activeJumpCool <= 0)
+        {
+            LongJump();
+        }
+
         Walk();
-        if ((TouchingWall || atLedge) && jumps && player.transform.position.y >= transform.position.y -.1f) Jump();
     }
 }
