@@ -151,7 +151,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void WallSlide() // wayk
     {
-        if (IsWalled() && !IsGrounded() && horizontal != 0f)
+        if (IsWalled() && !IsGrounded())
         {
             isWallSliding = true;
             rb.linearVelocity = new Vector2(0f, Mathf.Clamp(rb.linearVelocity.y, -wallSlidingSpeed, float.MaxValue));
@@ -161,7 +161,6 @@ public class PlayerMovement : MonoBehaviour
             isWallSliding = false;
         }
     }
-
 
     Vector2 lastWallJPos;
     private void WallJump() // wayk
@@ -178,17 +177,16 @@ public class PlayerMovement : MonoBehaviour
             wallJumpingCounter -= Time.deltaTime;
         }
 
-        if (Input.GetButtonDown("Jump") && wallJumpingCounter > 0f && canWallJump && (transform.position.x <= lastWallJPos.x - 1 || transform.position.x >= lastWallJPos.x + 1)) // fantastic tweaks av Edwin
+        // auto side jump when sliding on wall and pressing space
+        if (Input.GetKeyDown(KeyCode.Space) && isWallSliding && canWallJump)
         {
             StartCoroutine(WallJumpCooldownRoutine()); // start cooldown av wayk
-
 
             isWallJumping = true;
             rb.linearVelocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
             wallJumpingCounter = 0f;
 
             lastWallJPos = transform.position;
-            // flip
             if ((isFacingRight && wallJumpingDirection < 0) || (!isFacingRight && wallJumpingDirection > 0))
             {
                 Flip();
@@ -221,7 +219,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // --- DASH LOGIC --- (loke)
+    // --- DASH LOGIC --- (loke) (stretch av wayk)
     private IEnumerator PerformDash()
     {
         canDash = false;
@@ -230,10 +228,16 @@ public class PlayerMovement : MonoBehaviour
         float originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
 
+        Vector3 originalScale = transform.localScale;
+        Vector3 stretchedScale = new Vector3(originalScale.x * 1.2f, originalScale.y, originalScale.z);
+        transform.localScale = stretchedScale;
+
         float dashDirection = transform.localScale.x > 0 ? 1f : -1f;
         rb.linearVelocity = new Vector2(dashDirection * dashSpeed, 0f);
 
         yield return new WaitForSeconds(dashDuration);
+
+        transform.localScale = originalScale;
 
         rb.gravityScale = originalGravity;
         isDashing = false;

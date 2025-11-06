@@ -1,0 +1,379 @@
+fileFormatVersion: 2
+guid: ceb9472de71674747b1621d77211725b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4667210555105271094
+    second: animation mobs_0
+  - first:
+      213: 3771247222890578260
+    second: animation mobs_1
+  - first:
+      213: 6521628615551365699
+    second: animation mobs_2
+  - first:
+      213: -7491285544535570485
+    second: animation mobs_3
+  - first:
+      213: -6033117899768974648
+    second: animation mobs_4
+  - first:
+      213: 167318316914964236
+    second: animation mobs_5
+  - first:
+      213: 6020829224303919909
+    second: animation mobs_6
+  - first:
+      213: -5391568577206765941
+    second: animation mobs_7
+  - first:
+      213: -3973768783343352992
+    second: animation mobs_8
+  - first:
+      213: 7894745272038973002
+    second: animation mobs_9
+  - first:
+      213: -4300357408044434000
+    second: animation mobs_10
+  - first:
+      213: -563315689831018144
+    second: animation mobs_11
+  - first:
+      213: 6664553722906452014
+    second: animation mobs_12
+  - first:
+      213: -6881991765996865512
+    second: animation mobs_13
+  - first:
+      213: -7896921942441166678
+    second: animation mobs_14
+  - first:
+      213: -2149540365104053993
+    second: animation mobs_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 58.5
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: animation mobs_7
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 63
+        width: 51
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b86be6dd1fc4d25b0800000000000000
+      internalID: -5391568577206765941
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation mobs_8
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 127
+        width: 51
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 063884178565ad8c0800000000000000
+      internalID: -3973768783343352992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation mobs_9
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 63
+        width: 51
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4ed31c2ff4cf8d60800000000000000
+      internalID: 7894745272038973002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation mobs_10
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 127
+        width: 51
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0bdba4eb8bf0254c0800000000000000
+      internalID: -4300357408044434000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation mobs_11
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 127
+        width: 52
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 061d73b5d53be28f0800000000000000
+      internalID: -563315689831018144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation mobs_12
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 63
+        width: 53
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e20a858fc404d7c50800000000000000
+      internalID: 6664553722906452014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation mobs_13
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 127
+        width: 53
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 818f79083f04e70a0800000000000000
+      internalID: -6881991765996865512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation mobs_14
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 63
+        width: 55
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa87ec1455f786290800000000000000
+      internalID: -7896921942441166678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: animation mobs_15
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 63
+        width: 52
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7110c9b3d6c4b22e0800000000000000
+      internalID: -2149540365104053993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 531ec7881e087a547b07a70ad734d6d9
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      animation mobs_0: -4667210555105271094
+      animation mobs_1: 3771247222890578260
+      animation mobs_10: -4300357408044434000
+      animation mobs_11: -563315689831018144
+      animation mobs_12: 6664553722906452014
+      animation mobs_13: -6881991765996865512
+      animation mobs_14: -7896921942441166678
+      animation mobs_15: -2149540365104053993
+      animation mobs_2: 6521628615551365699
+      animation mobs_3: -7491285544535570485
+      animation mobs_4: -6033117899768974648
+      animation mobs_5: 167318316914964236
+      animation mobs_6: 6020829224303919909
+      animation mobs_7: -5391568577206765941
+      animation mobs_8: -3973768783343352992
+      animation mobs_9: 7894745272038973002
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
