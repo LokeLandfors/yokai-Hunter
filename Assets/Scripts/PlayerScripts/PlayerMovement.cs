@@ -151,7 +151,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void WallSlide() // wayk
     {
-        if (IsWalled() && !IsGrounded())
+        if (IsWalled() && !IsGrounded() && horizontal != 0f)
         {
             isWallSliding = true;
             rb.linearVelocity = new Vector2(0f, Mathf.Clamp(rb.linearVelocity.y, -wallSlidingSpeed, float.MaxValue));
@@ -161,6 +161,7 @@ public class PlayerMovement : MonoBehaviour
             isWallSliding = false;
         }
     }
+
 
     Vector2 lastWallJPos;
     private void WallJump() // wayk
@@ -177,27 +178,25 @@ public class PlayerMovement : MonoBehaviour
             wallJumpingCounter -= Time.deltaTime;
         }
 
-        // auto side jump when sliding on wall and pressing space
-        if (Input.GetKeyDown(KeyCode.Space) && isWallSliding && canWallJump)
+        if (Input.GetButtonDown("Jump") && wallJumpingCounter > 0f && canWallJump && (transform.position.x <= lastWallJPos.x - 1 || transform.position.x >= lastWallJPos.x + 1)) // fantastic tweaks av Edwin
         {
             StartCoroutine(WallJumpCooldownRoutine()); // start cooldown av wayk
 
+
             isWallJumping = true;
-
-            // jump away from wall with horizontal push
             rb.linearVelocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
+            wallJumpingCounter = 0f;
 
-            // flip the player so they face the direction they’re jumping
+            lastWallJPos = transform.position;
+            // flip
             if ((isFacingRight && wallJumpingDirection < 0) || (!isFacingRight && wallJumpingDirection > 0))
             {
                 Flip();
             }
 
-            lastWallJPos = transform.position;
             Invoke(nameof(StopWallJumping), wallJumpingDuration);
         }
     }
-
 
     private IEnumerator WallJumpCooldownRoutine() // wayk
     {
@@ -248,6 +247,7 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(dashCooldown);
         canDash = true;
     }
+
 
     private void OnDrawGizmosSelected()
     {

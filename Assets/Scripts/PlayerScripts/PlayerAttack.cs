@@ -1,11 +1,10 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class PlayerAttack : MonoBehaviour
 {
+
+    // gjort av wayk
     [SerializeField] private Transform attackTransform;
     [SerializeField] private float attackRange = 1.5f;
     [SerializeField] private LayerMask attackableLayer;
@@ -14,14 +13,14 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private playerSlide slideCode;
     [SerializeField] private PlayerMovement moveCode;
     [SerializeField] private float attackDuration = 1f;
+    [SerializeField] private float attackDelay = 0.8f; 
     [SerializeField] public bool isAttacking = false;
     [SerializeField] public bool canAttack = true;
 
     private RaycastHit2D[] hits;
-
     private Animator anim;
-
     private float attackTimeCounter;
+
     private void Start()
     {
         anim = GetComponent<Animator>();
@@ -29,10 +28,9 @@ public class PlayerAttack : MonoBehaviour
 
     private void Update()
     {
-        if (UserInput.instance.controls.Attack.Attack.WasPressedThisFrame() && canAttack == true && slideCode.isSliding == false && moveCode.isDashing == false)
+        if (UserInput.instance.controls.Attack.Attack.WasPressedThisFrame() && canAttack && !slideCode.isSliding && !moveCode.isDashing)
         {
             StartCoroutine(PerformAttack());
-
         }
     }
 
@@ -42,9 +40,7 @@ public class PlayerAttack : MonoBehaviour
 
         for (int i = 0; i < hits.Length; i++)
         {
-            IDamageable iDamageable = hits[i].collider.gameObject.GetComponent<IDamageable>();
-
-            if (iDamageable != null)
+            if (hits[i].collider.TryGetComponent(out IDamageable iDamageable))
             {
                 iDamageable.Damage(damageAmount);
             }
@@ -55,6 +51,7 @@ public class PlayerAttack : MonoBehaviour
     {
         Gizmos.DrawWireSphere(attackTransform.position, attackRange);
     }
+
     private IEnumerator PerformAttack()
     {
         canAttack = false;
@@ -63,13 +60,24 @@ public class PlayerAttack : MonoBehaviour
         isAttacking = true;
         moveCode.canMove = false;
         attackTimeCounter = 0f;
-        Attack();
+
         anim.SetTrigger("attack");
-        yield return new WaitForSeconds(attackDuration);
+
+
+        if (attackDelay > 0f)
+            yield return new WaitForSeconds(attackDelay);
+
+        Attack();
+
+
+        if (attackDuration > attackDelay)
+            yield return new WaitForSeconds(attackDuration - attackDelay);
+
         moveCode.canMove = true;
         isAttacking = false;
         slideCode.isSliding = false;
         moveCode.isDashing = false;
+
         yield return new WaitForSeconds(CooldownBtwAttacks);
         canAttack = true;
     }
