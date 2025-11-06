@@ -32,18 +32,28 @@ public class EnemyCoreLogic : MonoBehaviour //Av edwin
     [SerializeField] LayerMask groundLayer;
 
     [Header("Platforming and movement checks")]
+    public float wallCheckOffset;
+    public Vector2 wallCheckSize;
+
+    public Vector2 groundCheckSize;
+
+    public float ledgeCheckOffset;
+    public float ledgeCheckReach;
+
+    public float dropDownReach;
+
     //funktions-variabler (jag har ingen aning om vad de kallas)
     virtual public int walkDir => faceright ? 1 : -1;
     //^^^ automatiskt ändra värde i förhållande till faceright
-    public virtual bool TouchingWall => Physics2D.OverlapBox((Vector2)transform.position + new Vector2(walkDir,0), new Vector2(0.01f, 1f), groundLayer) ? true : false;
+    public virtual bool TouchingWall => Physics2D.OverlapBox((Vector2)transform.position + new Vector2(wallCheckOffset*walkDir,0), wallCheckSize, groundLayer) ? true : false;
     //^^^ Kolla om man rör en vägg åt det håll fienden går
-    public virtual bool TouchingGround => Physics2D.OverlapBox(groundCheck.transform.position, new Vector2(0.9f,0.01f),0, groundLayer) ? true : false;
+    public virtual bool TouchingGround => Physics2D.OverlapBox(groundCheck.transform.position, groundCheckSize,0, groundLayer) ? true : false;
     //^^^ Kolla om man är på marken med en overlapox
-    public virtual bool atLedge => Physics2D.Raycast((Vector2)transform.position + new Vector2(walkDir, 0), Vector2.down, 1.5f, groundLayer).collider ? false : true;
+    public virtual bool atLedge => Physics2D.Raycast((Vector2)transform.position + new Vector2(ledgeCheckOffset * walkDir, 0), Vector2.down, ledgeCheckReach, groundLayer).collider ? false : true;
     //^^^ kolla om fienden är vid en kant
 
-    public virtual bool atDropDown => Physics2D.Raycast((Vector2)transform.position + new Vector2(walkDir, 0), Vector2.down, 3.5f, groundLayer).collider ? true : false;
-    //^^^ kolla om fienden är vid en kant som kan hoppas av från
+    public virtual bool atDropDown => Physics2D.Raycast((Vector2)transform.position + new Vector2(walkDir, 0), Vector2.down, dropDownReach, groundLayer).collider ? true : false;
+    //^^^ kolla om fienden är vid en kant som är låg nog att hoppa från
 
     // Combat
     public bool melee; //kan göra melee attacker
