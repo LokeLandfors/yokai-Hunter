@@ -1,12 +1,12 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ESCbutton : MonoBehaviour
+public class MenuButtons : MonoBehaviour
 {
-    [Header("Assign the main menu canvas here")]
+    
     public GameObject mainMenuCanvas;
 
-    [Header("Optional canvases (assign later)")]
+   
     public GameObject statsCanvas;
     public GameObject skillsCanvas;
 
@@ -39,8 +39,6 @@ public class ESCbutton : MonoBehaviour
 
         if (statsCanvas != null)
             statsCanvas.SetActive(true);
-        else
-            Debug.LogWarning("Stats Canvas not assigned in MenuButtons script!");
     }
 
     
@@ -51,7 +49,5 @@ public class ESCbutton : MonoBehaviour
 
         if (skillsCanvas != null)
             skillsCanvas.SetActive(true);
-        else
-            Debug.LogWarning("Skills Canvas not assigned in MenuButtons script!");
     }
 }

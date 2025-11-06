@@ -1,27 +1,28 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ESCmenu : MonoBehaviour
 {
-    [Header("Assign your Canvas GameObject here")]
-    public GameObject menuCanvas;
+    [Header("Assign your menu canvas or panel here")]
+    public GameObject menu;
 
     private bool isMenuOpen = false;
 
     void Start()
     {
-         
-        if (menuCanvas != null)
-            menuCanvas.SetActive(false);
-        Time.timeScale = isMenuOpen ? 0f : 1f;
+        if (menu == null)
+        {
+            Debug.LogError("⚠️ ESCmenu: No menu assigned in the Inspector!");
+            return;
+        }
 
-
+        menu.SetActive(false); // Hide at start
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        Time.timeScale = 1f; // Normal gameplay speed
     }
 
     void Update()
     {
-        
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             ToggleMenu();
@@ -31,21 +32,19 @@ public class ESCmenu : MonoBehaviour
     void ToggleMenu()
     {
         isMenuOpen = !isMenuOpen;
-
-        if (menuCanvas != null)
-            menuCanvas.SetActive(isMenuOpen);
+        menu.SetActive(isMenuOpen);
 
         if (isMenuOpen)
         {
-            
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
+            Time.timeScale = 0f; // Pause game
         }
         else
         {
-            
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
+            Time.timeScale = 1f; // Resume game
         }
     }
 }
