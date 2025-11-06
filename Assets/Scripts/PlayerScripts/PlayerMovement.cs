@@ -183,18 +183,21 @@ public class PlayerMovement : MonoBehaviour
             StartCoroutine(WallJumpCooldownRoutine()); // start cooldown av wayk
 
             isWallJumping = true;
-            rb.linearVelocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
-            wallJumpingCounter = 0f;
 
-            lastWallJPos = transform.position;
+            // jump away from wall with horizontal push
+            rb.linearVelocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
+
+            // flip the player so they face the direction they’re jumping
             if ((isFacingRight && wallJumpingDirection < 0) || (!isFacingRight && wallJumpingDirection > 0))
             {
                 Flip();
             }
 
+            lastWallJPos = transform.position;
             Invoke(nameof(StopWallJumping), wallJumpingDuration);
         }
     }
+
 
     private IEnumerator WallJumpCooldownRoutine() // wayk
     {
