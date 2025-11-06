@@ -182,7 +182,7 @@ public class EnemyCoreLogic : MonoBehaviour //Av edwin
             rb.linearVelocity = new Vector2(agrospeed*jumpForce*walkDir, jumpForce);
             activeJumpCool = jumpCooldown;
             activeLongJump = true;
-            print("Big jump");
+
         }
     }
 
@@ -240,7 +240,6 @@ public class EnemyCoreLogic : MonoBehaviour //Av edwin
 
         if (!TouchingGround)
         {
-            print("mid air");
             return;
         }
         else if (TouchingWall && TouchingGround && jumps && player.position.y >= transform.position.y - 0.1f && activeJumpCool <= 0)
@@ -249,9 +248,6 @@ public class EnemyCoreLogic : MonoBehaviour //Av edwin
         }
         else if (atLedge && TouchingGround && jumps && player.position.y >= transform.position.y - 0.1f && activeJumpCool <= 0)
         {
-            print(atLedge);
-            print(TouchingGround);
-            print("ledge wow!");
             LongJump();
         }
 
