@@ -50,8 +50,8 @@ public class EnemyCoreLogic : MonoBehaviour //Av edwin
     public float MeleeDist; //hur nära för att göra melee attack
     public float meleeAttackDist; //hur långt meleeattack når
     public float meleeCool; //Melee cooldown
-    float activeMeleeCool;
-    bool activeMelee; //aktiverat melee
+    public float activeMeleeCool;
+    public bool activeMelee; //aktiverat melee
 
     public bool ranged; //kan använda distansvapen
     public float fireRange; //hur långt bort den får skjuta mot spelaren
@@ -215,7 +215,7 @@ public class EnemyCoreLogic : MonoBehaviour //Av edwin
             Walk();
             if ((TouchingWall || atLedge) && jumps && player.position.y >= transform.position.y - 0.1f && activeJumpCool <= 0)
             {
-                Jump();
+                LongJump();
             }
 
         }
