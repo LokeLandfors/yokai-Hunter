@@ -45,9 +45,9 @@ public class PlayerMovement : MonoBehaviour
     private float wallJumpingDuration = 0.8f;
     private Vector2 wallJumpingPower = new Vector2(4f, 8f);
     private bool isWallSliding;
-    private float wallSlidingSpeed = 2.5f; // smoother slide
+    private float wallSlidingSpeed = 2.5f; // smoother slide av wayk
 
-    // wall jump cooldown
+    // wall jump cooldown av wayk
     [SerializeField] float wallJumpCooldown = 0.6f;
     private bool canWallJump = true;
 
@@ -58,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
     public bool isDashing = false;
     private bool canDash = true;
 
-    void Start()
+    void Start() // wayk
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
@@ -66,12 +66,12 @@ public class PlayerMovement : MonoBehaviour
         respawnPoint = transform.position;
     }
 
-    public void Reset()
+    public void Reset() // wayk
     {
         transform.position = respawnPoint;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision) // wayk
     {
         if (collision.gameObject.GetComponent<Interactable>() == true)
         {
@@ -79,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision) // wayk
     {
         if (collision.gameObject.GetComponent<Interactable>() == true)
         {
@@ -87,19 +87,19 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private bool IsGrounded()
+    private bool IsGrounded() // wayk
     {
         return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
     }
 
-    private bool IsWalled()
+    private bool IsWalled() // wayk
     {
         return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayer);
     }
 
     void Update()
     {
-        // ta bort kontroller under dash
+        // ta bort kontroller under dash // wayk
         if (isDashing) return;
 
         horizontal = Input.GetAxisRaw("Horizontal");
@@ -113,20 +113,20 @@ public class PlayerMovement : MonoBehaviour
         if (!isWallJumping)
             Flip();
 
-        // --- DASH INPUT ---
+        // --- DASH INPUT --- (loke)
         if (Input.GetKeyDown(KeyCode.LeftShift) && canDash && !isDashing && slide.isSliding == false && atkCode.isAttacking == false)
         {
             StartCoroutine(PerformDash());
         }
 
-        // --- SLIDE INPUT (Left Ctrl) ---
+        // wayk
         if (slide != null && Input.GetKeyDown(KeyCode.LeftControl))
         {
             slide.isSliding = true;
         }
     }
 
-    void Move(float direction)
+    void Move(float direction) // wayk
     {
         float moveInput = Input.GetAxis("Horizontal");
         if (canMove == true && (slide == null || slide.isSliding == false))
@@ -135,7 +135,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void Jump()
+    void Jump() // wayk
     {
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded()
             )
@@ -149,7 +149,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void WallSlide()
+    private void WallSlide() // wayk
     {
         if (IsWalled() && !IsGrounded() && horizontal != 0f)
         {
@@ -164,7 +164,7 @@ public class PlayerMovement : MonoBehaviour
 
 
     Vector2 lastWallJPos;
-    private void WallJump()
+    private void WallJump() // wayk
     {
         if (isWallSliding)
         {
@@ -178,9 +178,9 @@ public class PlayerMovement : MonoBehaviour
             wallJumpingCounter -= Time.deltaTime;
         }
 
-        if (Input.GetButtonDown("Jump") && wallJumpingCounter > 0f && canWallJump && (transform.position.x <= lastWallJPos.x - 1 || transform.position.x >= lastWallJPos.x + 1))
+        if (Input.GetButtonDown("Jump") && wallJumpingCounter > 0f && canWallJump && (transform.position.x <= lastWallJPos.x - 1 || transform.position.x >= lastWallJPos.x + 1)) // fantastic tweaks av Edwin
         {
-            StartCoroutine(WallJumpCooldownRoutine()); // start cooldown
+            StartCoroutine(WallJumpCooldownRoutine()); // start cooldown av wayk
 
 
             isWallJumping = true;
@@ -198,19 +198,19 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private IEnumerator WallJumpCooldownRoutine()
+    private IEnumerator WallJumpCooldownRoutine() // wayk
     {
         canWallJump = false;
         yield return new WaitForSeconds(wallJumpCooldown);
         canWallJump = true;
     }
 
-    private void StopWallJumping()
+    private void StopWallJumping() // wayk
     {
         isWallJumping = false;
     }
 
-    private void Flip()
+    private void Flip() // wayk
     {
         if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
         {
@@ -221,7 +221,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // --- DASH LOGIC ---
+    // --- DASH LOGIC --- (loke)
     private IEnumerator PerformDash()
     {
         canDash = false;
