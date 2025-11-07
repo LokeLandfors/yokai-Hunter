@@ -20,7 +20,7 @@ public class ESCmenu : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             print("Hej");
             isMenuOpen = !isMenuOpen;
