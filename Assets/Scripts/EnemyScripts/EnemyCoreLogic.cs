@@ -58,7 +58,6 @@ public class EnemyCoreLogic : MonoBehaviour //Av edwin
     // Combat
     public bool melee; //kan göra melee attacker
     public float MeleeDist; //hur nära för att göra melee attack
-    public float meleeAttackDist; //hur långt meleeattack når
     public float meleeCool; //Melee cooldown
     public float activeMeleeCool;
     public bool activeMelee; //aktiverat melee
@@ -104,7 +103,7 @@ public class EnemyCoreLogic : MonoBehaviour //Av edwin
 
         if (seePlr) //ser spelaren och börjar sitt förföljande
         {
-            if (melee && (player.transform.position - transform.position).magnitude < meleeAttackDist && TouchingGround)
+            if (melee && (player.transform.position - transform.position).magnitude < MeleeDist && TouchingGround)
             {
                 currentspeed = 0;
                 print("mele");
