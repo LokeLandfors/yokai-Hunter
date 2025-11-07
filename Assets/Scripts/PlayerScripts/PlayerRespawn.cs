@@ -97,10 +97,10 @@ public class PlayerRespawn : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void QuitGame()
+    public void QuitGame() //ändrad till meny knapp, orka rename (edwin)
     {
         Time.timeScale = 1f;
-        Debug.Log("Quit Game");
-        Application.Quit();
+        Debug.Log("Go menu;");
+        SceneManager.LoadScene("0");
     }
 }
