@@ -120,10 +120,10 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // wayk
-        if (slide != null && Input.GetKeyDown(KeyCode.LeftControl))
+      /*  if (slide != null && Input.GetKeyDown(KeyCode.LeftControl))
         {
             slide.isSliding = true;
-        }
+        }*/
     }
 
     void Move(float direction) // wayk
