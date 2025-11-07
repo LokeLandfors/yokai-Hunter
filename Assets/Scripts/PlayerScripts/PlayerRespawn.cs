@@ -5,15 +5,21 @@ using System.Collections;
 
 public class PlayerRespawn : MonoBehaviour
 {
-    // wayk
+    // av wayk
     [Header("Respawn Settings")]
     public Transform respawnPoint;
-    public int playerHealth = 10;
+    public float playerHealth = 10;
 
     [Header("Death Settings")]
-    public GameObject deathScreenUI; 
+    public GameObject deathScreenUI;
     [SerializeField] private GameObject[] deathParticles;
-    public float deathDelay = 0.5f; 
+    public float deathDelay = 0.5f;
+
+    [Header("Blood Animation")]
+    public RectTransform blood2; 
+    public float bloodAnimDuration = 5f; 
+    private Vector2 bloodStartPos = new Vector2(0, 850);
+    private Vector2 bloodEndPos = new Vector2(0, 300);
 
     private bool isDead = false;
 
@@ -57,16 +63,37 @@ public class PlayerRespawn : MonoBehaviour
 
         yield return new WaitForSeconds(deathDelay);
 
+
         if (deathScreenUI != null)
             deathScreenUI.SetActive(true);
-        //pausa
+
+     
+        if (blood2 != null)
+        {
+            blood2.anchoredPosition = bloodStartPos;
+            StartCoroutine(AnimateBlood());
+        }
+
+        
         Time.timeScale = 0f;
     }
 
+    private IEnumerator AnimateBlood()
+    {
+        float elapsed = 0f;
+        while (elapsed < bloodAnimDuration)
+        {
+            elapsed += Time.unscaledDeltaTime; 
+            float t = elapsed / bloodAnimDuration;
+            blood2.anchoredPosition = Vector2.Lerp(bloodStartPos, bloodEndPos, t);
+            yield return null;
+        }
+        blood2.anchoredPosition = bloodEndPos; 
+    }
 
     public void RestartGame()
     {
-        Time.timeScale = 1f; 
+        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

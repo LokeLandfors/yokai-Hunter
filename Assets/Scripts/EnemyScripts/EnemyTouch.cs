@@ -4,7 +4,7 @@ public class EnemyTouch : MonoBehaviour
 {
     public int damage = 2; //Skada som spelaren ska ta när Enemy rör honom
 
-    void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {

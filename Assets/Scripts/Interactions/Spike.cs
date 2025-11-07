@@ -8,7 +8,7 @@ public class Spike : Interactable
 
     private void Start()
     {
-        reseter = FindObjectOfType<ResetManager>();
+        reseter = Object.FindFirstObjectByType<ResetManager>();
     }
     public override void Interact(PlayerMovement player)
     {

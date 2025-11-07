@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class playerSlide : MonoBehaviour
 {
-
+// av wayk | behövdes ta bort pga av SG inte kunde göra slide animation :(
     public bool isSliding = false;
     public PlayerMovement PL;
     public Rigidbody2D rgb;
@@ -18,7 +18,7 @@ public class playerSlide : MonoBehaviour
     [SerializeField] private PlayerMovement moveCode;
     [SerializeField] PlayerAttack AttackCode;
     private bool IsFacingRight = true; // För Slide
-
+    /* 
 
     private void Update()
     {
@@ -72,5 +72,5 @@ public class playerSlide : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         canSlide = true;
     }
-
+    */
 }

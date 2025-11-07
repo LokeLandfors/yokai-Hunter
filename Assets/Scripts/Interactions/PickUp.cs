@@ -9,7 +9,7 @@ public class PickUp : Interactable
     void Start()
     {
         if (player == null)
-            player = FindObjectOfType<PlayerMovement>();
+            player = Object.FindFirstObjectByType<PlayerMovement>();
     }
 
     public override void Interact(PlayerMovement player)
