@@ -19,7 +19,7 @@ public class PlayerAttack : MonoBehaviour
 
     private RaycastHit2D[] hits;
     private Animator anim;
-    private float attackTimeCounter;
+    //private float attackTimeCounter;
 
     private void Start()
     {
@@ -59,7 +59,7 @@ public class PlayerAttack : MonoBehaviour
         moveCode.isDashing = false;
         isAttacking = true;
         moveCode.canMove = false;
-        attackTimeCounter = 0f;
+        //attackTimeCounter = 0f;
 
         anim.SetTrigger("attack");
 

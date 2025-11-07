@@ -16,8 +16,8 @@ public class PlayerMovement : MonoBehaviour
     private bool isFacingRight = true;
     private Rigidbody2D rb;
     private bool isGrounded;
-    private bool canJump = true;
-    private bool isJumping = false;
+    //private bool canJump = true;
+    //private bool isJumping = false;
     private float horizontal;
 
     [SerializeField, Range(0, 10)] float groundCheckOffset;
