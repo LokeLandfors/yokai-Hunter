@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private bool isGrounded;
     //private bool canJump = true;
-    //private bool isJumping = false;
+    private bool isJumping = false;
     private float horizontal;
 
     [SerializeField, Range(0, 10)] float groundCheckOffset;
@@ -132,6 +132,7 @@ public class PlayerMovement : MonoBehaviour
         if (canMove == true && (slide == null || slide.isSliding == false))
         {
             rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+            animator.SetFloat("xVelocity", Mathf.Abs(rb.linearVelocity.x));
         }
     }
 
@@ -141,11 +142,13 @@ public class PlayerMovement : MonoBehaviour
             )
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            anim.SetBool("isJumping", true);
         }
 
         if (Input.GetButtonUp("Jump") && rb.linearVelocity.y > 0f)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
+            anim.SetBool("isJumping", false);
         }
     }
 

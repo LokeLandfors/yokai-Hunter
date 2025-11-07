@@ -18,7 +18,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] public bool canAttack = true;
 
     private RaycastHit2D[] hits;
-    private Animator anim;
+    [SerializeField] Animator anim;
     //private float attackTimeCounter;
 
     private void Start()
