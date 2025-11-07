@@ -22,7 +22,6 @@ public class ESCmenu : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            print("Hej");
             isMenuOpen = !isMenuOpen;
         }
 

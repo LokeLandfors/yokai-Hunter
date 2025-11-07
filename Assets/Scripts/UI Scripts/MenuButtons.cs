@@ -1,53 +1,76 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class MenuButtons : MonoBehaviour
 {
-    
-    public GameObject mainMenuCanvas;
+    [Header("UI References")]
+    public GameObject pauseMenuUI;
+    public Text hoverText;
 
-   
-    public GameObject statsCanvas;
-    public GameObject skillsCanvas;
+    [Header("Buttons")]
+    public Button button1; // Start
+    public Button button2; // Quit
+    public Button button3; // Stats
+    public Button button4; // Skills
 
-    
-    public void OnPlayPressed()
+    private void Start()
     {
-        if (mainMenuCanvas != null)
-            mainMenuCanvas.SetActive(false);
+        if (hoverText != null)
+            hoverText.gameObject.SetActive(false);
 
         
+        if (button1 != null)
+            button1.onClick.AddListener(ResumeGame);
+
+        if (button2 != null)
+            button2.onClick.AddListener(QuitToMainMenu);
+
+        // Add hover effects for Button 3 and 4
+        AddHoverListeners(button3, "Coming Soon");
+        AddHoverListeners(button4, "Coming Soon");
+    }
+
+    private void ResumeGame()
+    {
+        if (pauseMenuUI != null)
+            pauseMenuUI.SetActive(false);
+
         Time.timeScale = 1f;
-
-        
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
-    
-    public void OnQuitPressed()
+    private void QuitToMainMenu()
     {
-        
-        SceneManager.LoadScene("Main Menu");
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu");
     }
 
-    
-    public void OnStatsPressed()
+    private void AddHoverListeners(Button button, string message)
     {
-        if (mainMenuCanvas != null)
-            mainMenuCanvas.SetActive(false);
+        if (button == null || hoverText == null)
+            return;
 
-        if (statsCanvas != null)
-            statsCanvas.SetActive(true);
+        EventTrigger trigger = button.gameObject.GetComponent<EventTrigger>();
+        if (trigger == null)
+            trigger = button.gameObject.AddComponent<EventTrigger>();
+
+        trigger.triggers = new System.Collections.Generic.List<EventTrigger.Entry>();
+
+        // Pointer Enter
+        EventTrigger.Entry entryEnter = new EventTrigger.Entry { eventID = EventTriggerType.PointerEnter };
+        entryEnter.callback.AddListener((data) => ShowHoverText(message, true));
+        trigger.triggers.Add(entryEnter);
+
+        // Pointer Exit
+        EventTrigger.Entry entryExit = new EventTrigger.Entry { eventID = EventTriggerType.PointerExit };
+        entryExit.callback.AddListener((data) => ShowHoverText(message, false));
+        trigger.triggers.Add(entryExit);
     }
 
-    
-    public void OnSkillsPressed()
+    private void ShowHoverText(string message, bool show)
     {
-        if (mainMenuCanvas != null)
-            mainMenuCanvas.SetActive(false);
-
-        if (skillsCanvas != null)
-            skillsCanvas.SetActive(true);
+        hoverText.text = message;
+        hoverText.gameObject.SetActive(show);
     }
 }

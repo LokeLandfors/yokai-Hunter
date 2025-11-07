@@ -14,20 +14,20 @@ public class EnemyCoreLogic : MonoBehaviour //Av edwin
 
     // Movement
     [Header("Movement settings")]
-    bool faceright;
+    public bool faceright;
     public float roamspeed; //vanlig gå hastighet
     public float agrospeed; //gå hastighet när ser spelare
     public bool jumps; //kan hoppa
     public float jumpForce;
     public bool wallclimbs; //kan klättra väggar
-    float currentspeed;
-    float jumpCooldown = 0.5f;
-    float activeJumpCool = 0;
-    bool activeLongJump = false;
+    public float currentspeed;
+    public float jumpCooldown = 0.5f;
+    public float activeJumpCool = 0;
+    public bool activeLongJump = false;
 
     // Physics och collisions
     [Header("Collison checking")]
-    [SerializeField] Rigidbody2D rb;
+    public Rigidbody2D rb;
     [SerializeField] GameObject groundCheck;
     [SerializeField] LayerMask groundLayer;
 
@@ -58,7 +58,6 @@ public class EnemyCoreLogic : MonoBehaviour //Av edwin
     // Combat
     public bool melee; //kan göra melee attacker
     public float MeleeDist; //hur nära för att göra melee attack
-    public float meleeAttackDist; //hur långt meleeattack når
     public float meleeCool; //Melee cooldown
     public float activeMeleeCool;
     public bool activeMelee; //aktiverat melee
@@ -70,12 +69,12 @@ public class EnemyCoreLogic : MonoBehaviour //Av edwin
     // Playerdetection
     public float visDist; //hur långt spelaren syns
     bool seePlr => SearchTarget() ? true: false;
-    bool following = false; //ifall den ser och följer efter spelaren
-    bool searching = false; //^^^ fast den inte ser spelaren
+    public bool following = false; //ifall den ser och följer efter spelaren
+    public bool searching = false; //^^^ fast den inte ser spelaren
     [SerializeField] float maxSearchTime; //hur länge den får försöka nå sista sedda position
     float activeSearchTime;
     Vector2 lastseen; //spelarens sista sedda position
-    Transform player;
+    public Transform player;
     public LayerMask playerLayer; //coolt rim grej
 
 
@@ -101,13 +100,12 @@ public class EnemyCoreLogic : MonoBehaviour //Av edwin
 
     public virtual void Update()
     {
-
+        if (activeMelee) return;
         if (seePlr) //ser spelaren och börjar sitt förföljande
         {
-            if (melee && (player.transform.position - transform.position).magnitude < meleeAttackDist && TouchingGround)
+            if (melee && (player.transform.position - transform.position).magnitude < MeleeDist && TouchingGround)
             {
                 currentspeed = 0;
-                print("mele");
                 MeleeAttack();
                 return;
             }
@@ -209,7 +207,7 @@ public class EnemyCoreLogic : MonoBehaviour //Av edwin
 
     }
 
-    void GoToPoint(Vector2 point) //egentliggen själva leta funktionen men orka byta namn nu
+    public virtual void GoToPoint(Vector2 point) //egentliggen själva leta funktionen men orka byta namn nu
     {
 
         if (transform.position.x - player.position.x < 1 && transform.position.y - player.position.y > 3)
