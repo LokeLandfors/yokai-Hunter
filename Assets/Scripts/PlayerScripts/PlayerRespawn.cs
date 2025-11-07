@@ -5,6 +5,7 @@ using System.Collections;
 
 public class PlayerRespawn : MonoBehaviour
 {
+    // av wayk
     [Header("Respawn Settings")]
     public Transform respawnPoint;
     public float playerHealth = 10;

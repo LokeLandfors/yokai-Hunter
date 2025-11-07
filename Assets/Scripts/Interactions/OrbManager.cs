@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CoinManager : MonoBehaviour
+public class OrbManager : MonoBehaviour
 {
-    public static CoinManager Instance;
+    public static OrbManager Instance;
 
     [SerializeField] private Text coinText;
     private int coinCount = 0;
