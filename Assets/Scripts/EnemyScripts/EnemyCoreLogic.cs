@@ -90,7 +90,7 @@ public class EnemyCoreLogic : MonoBehaviour //Av edwin
 
     }
 
-    void Start()
+    public virtual void Start()
     {
         player = GameObject.Find("Player").transform;
         currentspeed = roamspeed;
@@ -107,6 +107,7 @@ public class EnemyCoreLogic : MonoBehaviour //Av edwin
             if (melee && (player.transform.position - transform.position).magnitude < meleeAttackDist && TouchingGround)
             {
                 currentspeed = 0;
+                print("mele");
                 MeleeAttack();
                 return;
             }
