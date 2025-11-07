@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class BaseEnemy : EnemyCoreLogic
@@ -21,16 +22,21 @@ public class BaseEnemy : EnemyCoreLogic
 
     public override void MeleeAttack()
     {
+        meleeDetect();
+    }
+
+    IEnumerator meleeDetect()
+    {
         print("POW");
-        if (activeMeleeCool > 0) return;
+        if (activeMeleeCool > 0) yield break;
         activeMelee = true;
-        new WaitForSecondsRealtime(meleeDelay);
+        yield return new WaitForSecondsRealtime(meleeDelay);
         Collider2D hitObj = Physics2D.OverlapBox(new Vector2(hitboxoffset * walkDir, 0), hitboxsize, 0, 8);
         print(hitObj);
         activeMeleeCool = meleeCool;
-        if (hitObj == null) 
+        if (hitObj == null)
         {
-            return; 
+            yield break;
         }
         else
         {
